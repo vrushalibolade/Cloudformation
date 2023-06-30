@@ -1,3 +1,3 @@
 # Cloudformation
-AWS cloudformation
+#AWS cloudformaton
 Json format to create EC2 instance, security group and RDS using cloudformation.
