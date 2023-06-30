@@ -1,0 +1,78 @@
+{
+    "Resources": {
+      "MySecurityGroup": {
+        "Type": "AWS::EC2::SecurityGroup",
+        "Properties": {
+          "GroupDescription": "Security group",
+          "GroupName": "CF-SecurityGroup",
+          "SecurityGroupIngress": [
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 80,
+              "ToPort": 80,
+              "CidrIp": "0.0.0.0/0"
+            },
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 443,
+              "ToPort": 443,
+              "CidrIp": "0.0.0.0/0"
+            },
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 22,
+              "ToPort": 22,
+              "CidrIp": "0.0.0.0/0"
+            }
+          ]
+        }
+      },
+      "MyEC2Instance": {
+        "Type": "AWS::EC2::Instance",
+        "Properties": {
+          "ImageId": "ami-0f5ee92e2d63afc18",
+          "InstanceType": "t2.micro",
+          "KeyName": "new",
+          "SecurityGroupIds": [
+            {
+              "Ref": "MySecurityGroup"
+            }
+          ],
+          "UserData": {
+            "Fn::Base64": {
+              "Fn::Join": [
+                "",
+                [
+                  "#!/bin/bash\n",
+                  "apt-get update\n",
+                  "apt-get install -y apache2\n",
+                  "systemctl enable apache2\n",
+                  "systemctl start apache2\n",
+                  "systemctl status apache2",
+                  "echo 'Hello from Vrushali' > /var/www/html/index.html\n"
+                ]
+              ]
+            }
+          }
+        }
+      },
+      "MyRDSInstance": {
+        "Type": "AWS::RDS::DBInstance",
+        "Properties": {
+          "DBInstanceIdentifier": "db1",
+          "Engine": "mysql",
+          "DBInstanceClass": "db.t2.micro",
+          "MasterUsername": "vrushali",
+          "MasterUserPassword": "vrushali123",
+          "AllocatedStorage": 20
+        }
+      }
+    }
+  }
+  
+
+
+
+            
+
+
